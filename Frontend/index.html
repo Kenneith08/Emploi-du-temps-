@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduSchedule — Emploi du Temps</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <rect x="4" y="4" width="10" height="10" rx="2" fill="var(--sky)" />
+                    <rect x="18" y="4" width="10" height="10" rx="2" fill="var(--sky-light)" />
+                    <rect x="4" y="18" width="10" height="10" rx="2" fill="var(--sky-light)" />
+                    <rect x="18" y="18" width="10" height="10" rx="2" fill="var(--sky)" />
+                </svg>
+            </div>
+            <span class="logo-text">EduSchedule</span>
+        </div>
+
+        <nav class="nav">
+            <a class="nav-item active" data-view="calendar" onclick="showView('calendar')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Emploi du temps
+            </a>
+            <a class="nav-item" data-view="cours" onclick="showView('cours')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                Cours
+            </a>
+            <a class="nav-item" data-view="seminaires" onclick="showView('seminaires')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Séminaires
+            </a>
+            <a class="nav-item" data-view="profs" onclick="showView('profs')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M20 21a8 8 0 1 0-16 0" />
+                </svg>
+                Professeurs
+            </a>
+            <a class="nav-item" data-view="ues" onclick="showView('ues')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                Unités d'ens.
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-add-event" onclick="openModal('event')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Nouvel événement
+            </button>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <section id="view-calendar" class="view active">
+            <header class="view-header">
+                <div>
+                    <h1 class="view-title">Emploi du Temps</h1>
+                    <p class="view-subtitle" id="week-label">Semaine du ...</p>
+                </div>
+                <div class="header-actions">
+                    <div class="week-nav">
+                        <button onclick="prevWeek()" class="icon-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <button onclick="goToToday()" class="btn-today">Aujourd'hui</button>
+                        <button onclick="nextWeek()" class="icon-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="calendar-grid-wrapper">
+                <div class="calendar-grid" id="calendar-grid">
+
+                </div>
+            </div>
+        </section>
+
+        <section id="view-cours" class="view">
+            <header class="view-header">
+                <div>
+                    <h1 class="view-title">Cours</h1>
+                    <p class="view-subtitle" id="cours-count">0 cours enregistrés</p>
+                </div>
+                <button class="btn-primary" onclick="openModal('cours')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Ajouter un cours
+                </button>
+            </header>
+            <div class="cards-grid" id="cours-list"></div>
+        </section>
+
+        <section id="view-seminaires" class="view">
+            <header class="view-header">
+                <div>
+                    <h1 class="view-title">Séminaires</h1>
+                    <p class="view-subtitle" id="sem-count">0 séminaires enregistrés</p>
+                </div>
+                <button class="btn-primary" onclick="openModal('seminaire')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Ajouter un séminaire
+                </button>
+            </header>
+            <div class="cards-grid" id="seminaires-list"></div>
+        </section>
+
+        <section id="view-profs" class="view">
+            <header class="view-header">
+                <div>
+                    <h1 class="view-title">Professeurs</h1>
+                    <p class="view-subtitle" id="profs-count">0 professeurs enregistrés</p>
+                </div>
+                <button class="btn-primary" onclick="openModal('prof')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Ajouter un professeur
+                </button>
+            </header>
+            <div class="cards-grid" id="profs-list"></div>
+        </section>
+
+        <section id="view-ues" class="view">
+            <header class="view-header">
+                <div>
+                    <h1 class="view-title">Unités d'Enseignement</h1>
+                    <p class="view-subtitle" id="ues-count">0 UE enregistrées</p>
+                </div>
+                <button class="btn-primary" onclick="openModal('ue')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Ajouter une UE
+                </button>
+            </header>
+            <div class="cards-grid" id="ues-list"></div>
+        </section>
+
+    </main>
+
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+
+    <div class="modal" id="modal-cours">
+        <div class="modal-header">
+            <h2>Nouveau Cours</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date & heure de début</label>
+                    <input type="datetime-local" id="cours-debut" />
+                </div>
+                <div class="form-group">
+                    <label>Date & heure de fin</label>
+                    <input type="datetime-local" id="cours-fin" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Unité d'Enseignement</label>
+                <select id="cours-ue"></select>
+            </div>
+            <div class="form-group">
+                <label>Professeur</label>
+                <select id="cours-prof"></select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Annuler</button>
+            <button class="btn-primary" onclick="saveCours()">Enregistrer</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-seminaire">
+        <div class="modal-header">
+            <h2>Nouveau Séminaire</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date & heure de début</label>
+                    <input type="datetime-local" id="sem-debut" />
+                </div>
+                <div class="form-group">
+                    <label>Date & heure de fin</label>
+                    <input type="datetime-local" id="sem-fin" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Responsable</label>
+                <select id="sem-responsable"></select>
+            </div>
+            <div class="form-group">
+                <label>Titre du séminaire</label>
+                <input type="text" id="sem-titre" placeholder="Ex: Introduction à l'IA" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Annuler</button>
+            <button class="btn-primary" onclick="saveSeminaire()">Enregistrer</button>
+        </div>
+    </div>
+    <div class="modal" id="modal-prof">
+        <div class="modal-header">
+            <h2>Nouveau Professeur</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="prof-nom" placeholder="Nom de famille" />
+                </div>
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="prof-prenom" placeholder="Prénom" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Âge</label>
+                    <input type="number" id="prof-age" placeholder="Âge" min="18" max="99" />
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <select id="prof-genre">
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Annuler</button>
+            <button class="btn-primary" onclick="saveProf()">Enregistrer</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-ue">
+        <div class="modal-header">
+            <h2>Nouvelle Unité d'Enseignement</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Matière</label>
+                <input type="text" id="ue-matiere" placeholder="Ex: Mathématiques" />
+            </div>
+            <div class="form-group">
+                <label>Crédits ECTS</label>
+                <input type="number" id="ue-credit" placeholder="Ex: 3" min="1" max="30" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Annuler</button>
+            <button class="btn-primary" onclick="saveUE()">Enregistrer</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-event">
+        <div class="modal-header">
+            <h2>Nouvel Événement</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="event-type-tabs">
+                <button class="tab-btn active" onclick="selectEventType('cours', this)">Cours</button>
+                <button class="tab-btn" onclick="selectEventType('seminaire', this)">Séminaire</button>
+            </div>
+            <div id="event-cours-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Heure de début</label>
+                        <input type="datetime-local" id="ev-cours-debut" />
+                    </div>
+                    <div class="form-group">
+                        <label>Heure de fin</label>
+                        <input type="datetime-local" id="ev-cours-fin" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>UE</label>
+                    <select id="ev-cours-ue"></select>
+                </div>
+                <div class="form-group">
+                    <label>Professeur</label>
+                    <select id="ev-cours-prof"></select>
+                </div>
+            </div>
+            <div id="event-seminaire-form" style="display:none">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Heure de début</label>
+                        <input type="datetime-local" id="ev-sem-debut" />
+                    </div>
+                    <div class="form-group">
+                        <label>Heure de fin</label>
+                        <input type="datetime-local" id="ev-sem-fin" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <select id="ev-sem-responsable"></select>
+                </div>
+                <div class="form-group">
+                    <label>Titre</label>
+                    <input type="text" id="ev-sem-titre" placeholder="Titre du séminaire" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal()">Annuler</button>
+            <button class="btn-primary" onclick="saveEvent()">Enregistrer</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
