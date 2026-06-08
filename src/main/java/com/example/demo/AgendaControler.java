@@ -6,14 +6,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // Permet à ton app.js de lui parler librement
+@CrossOrigin(origins = "*")
 public class AgendaControler {
 
     private final List<Prof> profs = new ArrayList<>();
     private final List<UniteEnseignement> ues = new ArrayList<>();
     private final List<Cours> cours = new ArrayList<>();
     private final List<Seminaire> seminaires = new ArrayList<>();
-    @RequestMapping("/api")
+
+    // ── PROFS ──────────────────────────────────────────────────────────────
+
     @GetMapping("/profs")
     public List<Prof> getProfs() { return profs; }
 
@@ -22,6 +24,14 @@ public class AgendaControler {
         profs.add(prof);
         return prof;
     }
+
+    // FIX: route DELETE manquante
+    @DeleteMapping("/profs/{id}")
+    public void deleteProf(@PathVariable String id) {
+        profs.removeIf(p -> id.equals(p.getId()));
+    }
+
+    // ── UEs ────────────────────────────────────────────────────────────────
 
     @GetMapping("/ues")
     public List<UniteEnseignement> getUes() { return ues; }
@@ -32,6 +42,14 @@ public class AgendaControler {
         return ue;
     }
 
+    // FIX: route DELETE manquante
+    @DeleteMapping("/ues/{id}")
+    public void deleteUE(@PathVariable String id) {
+        ues.removeIf(u -> id.equals(u.getId()));
+    }
+
+    // ── COURS ──────────────────────────────────────────────────────────────
+
     @GetMapping("/cours")
     public List<Cours> getCours() { return cours; }
 
@@ -41,6 +59,14 @@ public class AgendaControler {
         return c;
     }
 
+    // FIX: route DELETE manquante
+    @DeleteMapping("/cours/{id}")
+    public void deleteCours(@PathVariable String id) {
+        cours.removeIf(c -> id.equals(c.getId()));
+    }
+
+    // ── SÉMINAIRES ─────────────────────────────────────────────────────────
+
     @GetMapping("/seminaires")
     public List<Seminaire> getSeminaires() { return seminaires; }
 
@@ -48,5 +74,11 @@ public class AgendaControler {
     public Seminaire addSeminaire(@RequestBody Seminaire s) {
         seminaires.add(s);
         return s;
+    }
+
+    // FIX: route DELETE manquante
+    @DeleteMapping("/seminaires/{id}")
+    public void deleteSeminaire(@PathVariable String id) {
+        seminaires.removeIf(s -> id.equals(s.getId()));
     }
 }

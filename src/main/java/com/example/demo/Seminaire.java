@@ -1,25 +1,22 @@
 package com.example.demo;
 
-import java.time.LocalDateTime;
-
 public class Seminaire extends Evenement {
     private Personne responsable;
+    private String titre;
 
     public Seminaire() {
         super();
     }
 
-    public Seminaire(LocalDateTime heureDebut, LocalDateTime heureFin, Personne responsable) {
+    public Seminaire(String heureDebut, String heureFin, Personne responsable, String titre) {
         super(heureDebut, heureFin);
         this.responsable = responsable;
+        this.titre = titre;
     }
 
-    // Getters et Setters
-    public Personne getResponsable() {
-        return responsable;
-    }
+    public Personne getResponsable() { return responsable; }
+    public void setResponsable(Personne responsable) { this.responsable = responsable; }
 
-    public void setResponsable(Personne responsable) {
-        this.responsable = responsable;
-    }
+    public String getTitre() { return titre; }
+    public void setTitre(String titre) { this.titre = titre; }
 }
